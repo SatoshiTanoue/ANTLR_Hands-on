@@ -52,7 +52,7 @@ Create batch commands for ANTLR Tool, TestRig in dir in PATH
 Linux
 ```
 $ cd /usr/local/lib
-$ sudo wget -O http://www.antlr.org/download/antlr-4.7-complete.jar
+$ sudo wget http://www.antlr.org/download/antlr-4.7-complete.jar
 $ cd 
 $ echo export CLASSPATH=".:/usr/local/lib/antlr-4.7-complete.jar:$CLASSPATH" >> ~/.bashrc 
 $ echo alias antlr4='java -jar /usr/local/lib/antlr-4.7-complete.jar' >> ~/.bashrc 
