@@ -33,9 +33,11 @@ http://www.antlr.org/　
 
 # ANTLRのインストール
 
-ANTLRのインストールは，Jarファイルをダウンロードしてきて，installすることによって，動きます．
+ANTLRのインストールは，Jarファイルをダウンロードしてきて CLASSPATH，aliasの設定を行うことによって動きます．
 
-```windows
+Windowsはよくわからないので，各自調べてください．
+
+```
 Download http://antlr.org/download/antlr-4.7-complete.jar.
 Add antlr4-complete.jar to CLASSPATH, either:
 Permanently: Using System Properties dialog > Environment variables > Create or append to CLASSPATH variable
@@ -46,9 +48,9 @@ Create batch commands for ANTLR Tool, TestRig in dir in PATH
  grun.bat:   java org.antlr.v4.gui.TestRig %*
 
 ```
-Windowsはよくわからないので，各自調べてください．
 
-```Linux
+Linux
+```
 $ cd /usr/local/lib
 $ sudo wget -O http://www.antlr.org/download/antlr-4.7-complete.jar
 $ cd 
@@ -58,7 +60,8 @@ $ echo alias grun='java org.antlr.v4.gui.TestRig' >> ~/.bashrc
 $ source ~/.bashrc
 ```
 
-```Mac 
+Mac
+```
 $ cd /usr/local/lib
 $ sudo curl -O http://www.antlr.org/download/antlr-4.7-complete.jar
 $ cd 
