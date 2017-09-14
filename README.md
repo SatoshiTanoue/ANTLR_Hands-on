@@ -35,7 +35,7 @@ http://www.antlr.org/　
 
 ANTLRのインストールは，Jarファイルをダウンロードしてきて CLASSPATH，aliasの設定を行うことによって動きます．
 
-Windowsはよくわからないので，各自調べてください．
+Windowsはよくわからないので，各自調べてください．一応公式リファレンスに記載されていたものを引用して持ってきます．
 
 ```
 Download http://antlr.org/download/antlr-4.7-complete.jar.
