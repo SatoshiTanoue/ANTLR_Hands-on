@@ -107,3 +107,194 @@ Use startRuleName='tokens' if GrammarName is a lexer grammar.
 Omitting input-filename makes rig read from stdin.
  
 ```
+
+# Hello World
+ 
+ では早速，Hello Worldを動かしてみましょう．
+ 
+
+ ```
+$ git clone https://github.com/SatoshiTanoue/ANTLR_Hands-on.git #ダウンロード
+$ cd ANTLR_Hands-on/Hello　#Helloのあるディレクトリに移動．
+$ antlr4 Hello.g4 #Helloという文法ファイルからパーサ，レキサーを生成．
+$ ls #生成されたファイルを確認 
+$ javac *.java 
+$ grun Hello r -gui 
+  Hello Satoshi 
+  #ctl+d  で終了
+ ```
+
+GUIで木構造が表示されたでしょう．grunは，antlrのテストのために作られたコマンドです．
+grunを使うことにより，シェル上で，実行結果を確認できます．
+
+動かしてみたところで，Hello.g4の中身を見てみましょう．
+
+```Hello.g4
+1: grammar Hello;
+2: r : 'hello' ID ;
+3: ID : [a-z]+ ;
+4: WS : [ \t\r\n]+ -> skip ;
+```
+
+字句（終端文字）を定義する場合は，大文字を使います．字句を英語でトークン（Token）と言います．
+Hello.g4では，字句はID，WSです．
+正規表現を利用することができ，3行目のIDは，aからzまでの1文字以上の繰り返しの文字にマッチします．
+4行目のWSは，タブ文字や改行文字の1文字以上の繰り返しにマッチします．
+タブ文字や改行文字は無視したいので， スキップを利用して無視しています．
+構文（非終端文字）を定義する場合は，小文字を使います．構文を英語でシンタックス（Syntax)と言います．
+2行目のrという構文は，'hello'とIDという文字からなるという意味になります．
+
+# HelloをJavaのソースコードから呼び出す
+
+ANLTRを利用して，パーサを生成し，テスト用のgrunコマンドを利用して動かすことができました．
+次は，生成されたパーサのプログラムをJavaから呼び出してみます．
+
+次のJavaファイルを作成してください．
+ファイル名はMain.javaにしてください．
+
+```Main.java
+import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.tree.*;
+import org.antlr.v4.gui.Trees;
+
+import java.io.IOException;
+
+public class Main {
+
+    public static void main(String[] args) throws IOException {
+        System.out.println("Hello World!");
+        ANTLRInputStream input = new ANTLRInputStream(System.in);
+        // Lexerを作成．
+        HelloLexer lexer = new HelloLexer(input);
+        //トークンを取得
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+        //パーサを作成 
+        HelloParser parser = new HelloParser(tokens);
+        //パースする．
+        ParseTree tree = parser.r();   
+        //GUIで表示 
+        Trees.inspect(tree,parser);
+    }
+}
+```
+
+
+```
+$ Javac Main.java
+$ Java Main
+Hello World
+
+# ctrl + d or ctrl + z
+```
+
+# Javaのソースコードからフィールド名を取得する
+
+Javaのソースコードから，フィールド名を取得しみましょう
+ANTLRは，字句解析を行うLexer，構文解析解を行うParserを自動生成します．
+この自動生成されたLexer，Parserを使用することで，構文規則木を作ることができます．
+
+この構文木から情報を取得するには，Listenerを使う必要があります．
+Listenerを利用するには，AntlrがBaseListnerを生成するので，
+そのクラスを継承して新しい子クラスを作る必要があります．
+
+JavaBaseListenr.javaというファイルがあります．このクラスを継承して新しいクラスを作ります．
+このJavaの部分は，文法ファイルによって名前が変わります．
+今回は，Java.g4という名前の文法ファイルから生成しているので，Javaとなっています
+
+ファイル名はMain.javaにしてください．
+
+```Main.java
+import org.antlr.v4.gui.Trees;
+import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+
+public class Main{
+   public static void main(String[] args) throws Exception {
+      String filePath="examples/Item.java";
+      start(filePath);
+}
+   public static void start(String filePath){
+
+      try {
+      　　//ファイル開いて，読み込み
+         InputStream is = new FileInputStream(filePath);
+         ANTLRInputStream input = new ANTLRInputStream(is);
+         // Lexerの作成
+         JavaLexer lexer= new JavaLexer(input);
+         // Tokenの取得
+         CommonTokenStream tokens = new CommonTokenStream(lexer);
+         //Parserの作成
+         JavaParser parser = new JavaParser(tokens);
+         ParseTree tree = parser.compilationUnit();    
+
+		  //Listenerを用いて探索
+         ParseTreeWalker walker = new ParseTreeWalker();
+         ExtractListener extractor = new ExtractListener(parser);
+         walker.walk(extractor,tree);
+
+         Trees.inspect(tree,parser);
+      } catch (FileNotFoundException e) {
+         e.printStackTrace();
+      } catch (IOException e) {
+         e.printStackTrace();
+      }
+
+   }
+}
+```
+次に，JavaBaseListenrを継承したExtractListenerを作ります．
+このExtractListenrを利用して，構文木から情報を取得します．
+構文木から情報を取得する場合には，どの箇所が変数宣言のものか読み解く必要があります．
+Java.g4
+
+``` ExtractListenr
+
+import org.antlr.v4.runtime.TokenStream;
+
+/**
+ * Created by satopi on 2017/09/19.
+ */
+public class ExtractListener extends JavaBaseListener{
+    JavaParser parser;
+    public ExtractListener(JavaParser parser){
+        this.parser = parser;
+    }
+    @Override
+    public void enterVariableDeclaratorId(JavaParser.VariableDeclaratorIdContext ctx){
+        System.out.println("呼び出された際のFiled名:"+ctx.Identifier());
+    }
+
+    @Override
+    public void enterVariableDeclarator(JavaParser.VariableDeclaratorContext ctx){
+        TokenStream tokens = parser.getTokenStream();
+        String variableDeclartorId = "";
+        if(ctx.variableDeclaratorId() != null) {
+            variableDeclartorId = tokens.getText(ctx.variableDeclaratorId());
+        }
+        System.out.println("フィールド名宣言時のFiled名:"+variableDeclartorId);
+    }
+//    @Override
+//    public void enterClassBody(JavaParser.ClassBodyContext ctx){
+//        TokenStream tokens = parser.getTokenStream();
+//        if(ctx.classBodyDeclaration()!= null) {
+//            for(JavaParser.ClassBodyDeclarationContext 					cbdt:ctx.classBodyDeclaration()){
+//                if(ctx.classBodyDeclaration()!= null) {
+//                    System.out.println("class構造"+tokens.getText(cbdt));
+//                }
+//
+//            }
+//        }
+//
+//    }
+
+}
+```
+
+
