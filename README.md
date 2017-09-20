@@ -234,7 +234,7 @@ public class Main{
          JavaParser parser = new JavaParser(tokens);
          ParseTree tree = parser.compilationUnit();    
 
-		  //Listenerを用いて探索
+	　　//Listenerを用いて探索
          ParseTreeWalker walker = new ParseTreeWalker();
          ExtractListener extractor = new ExtractListener(parser);
          walker.walk(extractor,tree);
@@ -273,12 +273,7 @@ public class ExtractListener extends JavaBaseListener{
 
     @Override
     public void enterVariableDeclarator(JavaParser.VariableDeclaratorContext ctx){
-        TokenStream tokens = parser.getTokenStream();
-        String variableDeclartorId = "";
-        if(ctx.variableDeclaratorId() != null) {
-            variableDeclartorId = tokens.getText(ctx.variableDeclaratorId());
-        }
-        System.out.println("フィールド名宣言時のFiled名:"+variableDeclartorId);
+	System.out.println("変数宣言時のFiled名"+ctx.variableDeclaratorId().getText());
     }
 //    @Override
 //    public void enterClassBody(JavaParser.ClassBodyContext ctx){
