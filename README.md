@@ -200,7 +200,11 @@ JavaBaseListenr.javaというファイルがあります．このクラスを継
 このJavaの部分は，文法ファイルによって名前が変わります．
 今回は，Java.g4という名前の文法ファイルから生成しているので，Javaとなっています
 
-ファイル名はMain.javaにしてください．
+Javaディレクトリに移動してください．
+```
+cd ../Java
+```
+ファイル名はMain.javaにして下記ファイルを作成してください．
 
 ```Main.java
 import org.antlr.v4.gui.Trees;
@@ -271,7 +275,7 @@ variableDeclaratorId
 これを利用して，必要なBaseListenerのメソッドをオーバーライドします．
 enterはある構文に入ったときに動き，exitはある構文から出たときに動きます．
 
-
+ファイル名は，ExtractListener.javaにしてください．
 ``` ExtractListenr.java
 
 import org.antlr.v4.runtime.TokenStream;
