@@ -315,7 +315,7 @@ public class ExtractListener extends JavaBaseListener{
 $ antlr4 java.g4
 $ javac Java*.java
 $ javac -Xlint:deprecation Main.java
-$ java Main.java
+$ java Main
 ```
 
 # 課題
