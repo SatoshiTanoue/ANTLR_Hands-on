@@ -254,7 +254,7 @@ public class Main{
 構文木から情報を取得する場合には，どの箇所が変数宣言のものか読み解く必要があります．
 Java.g4
 
-``` ExtractListenr
+``` ExtractListenr.java
 
 import org.antlr.v4.runtime.TokenStream;
 
