@@ -162,15 +162,14 @@ import java.io.IOException;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-        System.out.println("Hello World!");
-        ANTLRInputStream input = new ANTLRInputStream(System.in);
-        // Lexerを作成．
+        ANTLRInputStream input = new ANTLRInputStream(System.in)
+	// Lexerを作成．
         HelloLexer lexer = new HelloLexer(input);
-        //トークンを取得
+	//トークンを取得
         CommonTokenStream tokens = new CommonTokenStream(lexer);
-        //パーサを作成 
+	//パーサを作成 
         HelloParser parser = new HelloParser(tokens);
-        //パースする．
+	//パースする．
         ParseTree tree = parser.r();   
         //GUIで表示 
         Trees.inspect(tree,parser);
