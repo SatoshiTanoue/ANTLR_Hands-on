@@ -180,8 +180,8 @@ public class Main {
 
 
 ```
-$ Javac Main.java
-$ Java Main
+$ javac -Xlint:deprecation Main.java
+$ java Main
 Hello World
 
 # ctrl + d or ctrl + z
@@ -251,8 +251,27 @@ public class Main{
 ```
 次に，JavaBaseListenrを継承したExtractListenerを作ります．
 このExtractListenrを利用して，構文木から情報を取得します．
-構文木から情報を取得する場合には，どの箇所が変数宣言のものか読み解く必要があります．
-Java.g4
+構文木から情報を取得する場合には，文法ファイルを見る必要があります．
+Java.g4では，下記部分が変数宣言の箇所です．
+
+```Java.g4
+variableDeclarators
+    :   variableDeclarator (',' variableDeclarator)*
+    ;
+
+variableDeclarator
+    :   variableDeclaratorId ('=' variableInitializer)?
+    ;
+
+variableDeclaratorId
+    :   Identifier ('[' ']')*
+    ;
+
+```
+
+これを利用して，必要なBaseListenerのメソッドをオーバーライドします．
+enterはある構文に入ったときに動き，exitはある構文から出たときに動きます．
+
 
 ``` ExtractListenr.java
 
@@ -291,5 +310,18 @@ public class ExtractListener extends JavaBaseListener{
 
 }
 ```
+コンパイルして実行
+
+```
+$ antlr4 java.g4
+$ javac Java*.java
+$ javac -Xlint:deprecation Main.java
+$ java Main.java
+```
+
+# 課題
+
+1.クラス名を表示しよう
+2.メソッド名を表示しよう
 
 
