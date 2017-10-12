@@ -37,6 +37,7 @@ ANTLRのインストールは，Jarファイルをダウンロードしてきて
 
 Windowsはよくわからないので，各自調べてください．一応公式リファレンスに記載されていたものを引用して持ってきます．
 
+Windows
 ```
 Download http://antlr.org/download/antlr-4.7-complete.jar.
 Add antlr4-complete.jar to CLASSPATH, either:
