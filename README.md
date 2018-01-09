@@ -298,20 +298,17 @@ public class ExtractListener extends JavaBaseListener{
     public void enterVariableDeclarator(JavaParser.VariableDeclaratorContext ctx){
 	System.out.println("変数宣言時のFiled名"+ctx.variableDeclaratorId().getText());
     }
-//    @Override
-//    public void enterClassBody(JavaParser.ClassBodyContext ctx){
-//        TokenStream tokens = parser.getTokenStream();
-//        if(ctx.classBodyDeclaration()!= null) {
-//            for(JavaParser.ClassBodyDeclarationContext 					cbdt:ctx.classBodyDeclaration()){
-//                if(ctx.classBodyDeclaration()!= null) {
-//                    System.out.println("class構造"+tokens.getText(cbdt));
-//                }
-//
-//            }
-//        }
-//
-//    }
-
+    /*@Override
+    public void enterFieldDeclaration(JavaParser.FieldDeclarationContext ctx){
+        System.out.println("フィールド宣言時のFiled名:"+ctx.variableDeclarators().getText());
+    }
+    @Override
+    public void enterMemberDeclaration(JavaParser.MemberDeclarationContext ctx){
+        if(ctx.methodDeclaration() != null) {
+            System.out.println("メソット宣言時のメソッド名:" + ctx.methodDeclaration().Identifier());
+        }
+    }
+    */
 }
 ```
 コンパイルして実行
