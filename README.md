@@ -320,9 +320,5 @@ $ javac -Xlint:deprecation Main.java
 $ java Main
 ```
 
-# 課題
-
-1.クラス名を表示しよう
-2.メソッド名を表示しよう
 
 
